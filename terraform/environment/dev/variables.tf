@@ -67,6 +67,10 @@ variable "db_username" {
   type = string
 }
 
+variable "db_password" {
+  type = string
+}
+
 # Frontend Module
 variable "bucket_suffix" {
   type = string

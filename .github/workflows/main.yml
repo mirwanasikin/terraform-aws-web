@@ -38,7 +38,8 @@ jobs:
           terraform plan \
             -var-file="terraform.ci.tfvars" \
             -var="db_name=${{ secrets.DB_NAME }}" \
-            -var="db_username=${{ secrets.DB_USERNAME }}"
+            -var="db_username=${{ secrets.DB_USERNAME }}" \
+            -var="db_password=${{ secrets.DB_PASSWORD }}"
 
       - name: terraform apply
         working-directory: terraform/environment/dev
@@ -46,4 +47,5 @@ jobs:
           terraform apply -auto-approve \
             -var-file="terraform.ci.tfvars" \
             -var="db_name=${{ secrets.DB_NAME }}" \
-            -var="db_username=${{ secrets.DB_USERNAME }}"
+            -var="db_username=${{ secrets.DB_USERNAME }}" \
+            -var="db_password=${{ secrets.DB_PASSWORD }}"

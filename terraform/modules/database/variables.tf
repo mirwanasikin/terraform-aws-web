@@ -32,3 +32,8 @@ variable "db_username" {
   type        = string
   description = "Master username RDS"
 }
+
+variable "db_password" {
+  type        = string
+  description = "DB Password"
+}
