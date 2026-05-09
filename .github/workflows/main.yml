@@ -34,8 +34,16 @@ jobs:
 
       - name: terraform plan
         working-directory: terraform/environment/dev
-        run: terraform plan
+        run: |
+          terraform plan \
+            -var-file="terraform.ci.tfvars" \
+            -var="db_name=${{ secrets.DB_NAME }}" \
+            -var="db_username=${{ secrets.DB_USERNAME }}"
 
       - name: terraform apply
         working-directory: terraform/environment/dev
-        run: terraform apply -auto-approve
+        run: |
+          terraform apply -auto-approve \
+            -var-file="terraform.ci.tfvars" \
+            -var="db_name=${{ secrets.DB_NAME }}" \
+            -var="db_username=${{ secrets.DB_USERNAME }}"
