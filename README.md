@@ -1,15 +1,17 @@
-# Terraform AWS Infrastructure (Modular Setup)
+<h1 align="center">Terraform AWS Infrastructure 🏗️</h1>
 
-## 📦 Overview
+<div align="center">
+  <img src="https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white" alt="Terraform"/>
+  <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonwebservices&logoColor=white" alt="AWS"/>
+  <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="GitHub Actions"/>
+  <img src="https://img.shields.io/github/last-commit/mirwanasikin/terraform-aws-web?style=for-the-badge&logo=github&labelColor=black&color=blue" alt="Last Commit"/>
+  <img src="https://img.shields.io/github/license/mirwanasikin/terraform-aws-web?style=for-the-badge" alt="License"/>
+</div>
 
-This repository contains a modular Terraform setup for provisioning a production-style infrastructure on AWS.
+<br/>
 
-The architecture is designed to be:
-
-- Scalable
-- Maintainable
-- Environment-separated (dev & prod)
-- Easy to extend
+> [!NOTE]
+> Modular Terraform setup for provisioning production-style AWS infrastructure. Designed to be scalable, maintainable, and environment-separated.
 
 ---
 
@@ -17,18 +19,18 @@ The architecture is designed to be:
 
 ```
 User → CloudFront →
-  ├── /        → S3 (Frontend - static files)
-  └── /api/*   → ALB → EC2 → Database
+├── /*      → S3 (Frontend - React static files)
+└── /api/*  → ALB → EC2 → RDS
 ```
 
-### Summary
-
-- **CloudFront** acts as CDN + entry point
-- **S3** serves static frontend
-- **ALB** routes traffic to backend
-- **EC2** runs application logic
-- **Database** stores persistent data
-- **VPC** isolates networking
+| Layer         | Service    | Role                       |
+| ------------- | ---------- | -------------------------- |
+| CDN           | CloudFront | Entry point + caching      |
+| Frontend      | S3         | Static file hosting        |
+| Load Balancer | ALB        | Traffic routing to backend |
+| Compute       | EC2        | Application logic (Flask)  |
+| Database      | RDS        | Persistent storage         |
+| Networking    | VPC        | Isolation + security       |
 
 ---
 
@@ -36,133 +38,68 @@ User → CloudFront →
 
 ```
 .
-├── environment/
-│   ├── dev/
-│   └── prod/
-└── modules/
-    ├── network/
-    ├── security_group/
-    ├── compute/
-    ├── database/
-    ├── load_balancer/
-    ├── cloudfront/
-    ├── frontend/
-    └── role/
+├── .github/workflows/   # CI/CD pipelines
+├── terraform/
+│   ├── environment/
+│   │   ├── dev/
+│   │   └── prod/
+│   └── modules/
+│       ├── network/
+│       ├── security_group/
+│       ├── compute/
+│       ├── database/
+│       ├── load_balancer/
+│       ├── cloudfront/
+│       ├── frontend/
+│       └── role/
 ```
 
 ---
 
 ## 🚀 Getting Started
 
-### 1. Choose Environment
-
-Start from:
-
-```
-environment/dev/
-```
-
-or
-
-```
-environment/prod/
-```
-
----
-
-### 2. Initialize Terraform
+> [!IMPORTANT]
+> Make sure you have AWS credentials configured and Terraform installed before proceeding.
 
 ```bash
+# 1. Choose your environment
+cd terraform/environment/dev
+
+# 2. Initialize
 terraform init
-```
 
----
-
-### 3. Plan Changes
-
-```bash
+# 3. Preview changes
 terraform plan
-```
 
----
-
-### 4. Apply Infrastructure
-
-```bash
+# 4. Apply
 terraform apply
 ```
 
 ---
 
-## 🧩 Modules Explanation
+## 🧩 Modules
 
-| Module           | Description               |
-| ---------------- | ------------------------- |
-| `network`        | VPC, subnets, routing     |
-| `security_group` | Firewall rules            |
-| `compute`        | EC2 instances             |
-| `database`       | Database resources        |
-| `load_balancer`  | Application Load Balancer |
-| `cloudfront`     | CDN and request routing   |
-| `frontend`       | S3 static hosting         |
-| `role`           | IAM roles and permissions |
+| Module           | Description             |
+| ---------------- | ----------------------- |
+| `network`        | VPC, subnets, routing   |
+| `security_group` | Firewall rules          |
+| `compute`        | EC2 instances           |
+| `database`       | RDS resources           |
+| `load_balancer`  | ALB setup               |
+| `cloudfront`     | CDN + request routing   |
+| `frontend`       | S3 static hosting       |
+| `role`           | IAM roles & permissions |
 
----
-
-## 🔍 How to Read This Repo (Important)
-
-If you're new, follow this order:
-
-1. `environment/dev/main.tf` → entry point (big picture)
-2. `modules/network` → base infrastructure
-3. `modules/compute` & `database`
-4. `modules/load_balancer`
-5. `modules/cloudfront`
-
-Think in terms of **request flow**, not files.
+> [!TIP]
+> If you're new, read in this order: `environment/dev/main.tf` → `modules/network` → `modules/compute` → `modules/load_balancer` → `modules/cloudfront`. Think in terms of **request flow**, not files.
 
 ---
 
-## ⚠️ Notes
+## 📌 Roadmap
 
-- This setup is **modular by design**, so expect multiple files.
-- Some configurations may look verbose (especially CloudFront).
-- Focus on **architecture flow**, not just Terraform syntax.
-
----
-
-## 🧪 Philosophy
-
-This project follows:
-
-- Infrastructure as Code (IaC)
-- Separation of concerns
-- Reusable modules
-- Real-world architecture patterns
-
----
-
-## 📌 Future Improvements (Optional Ideas)
-
-- Migrate to CloudFront cache & origin request policies
-- Add CI/CD (GitHub Actions)
-- Add monitoring (CloudWatch, logs, alerts)
-- Improve security (WAF, stricter SG rules)
-
----
-
-## 💬 Final Note
-
-This repo is not optimized for beginners by default.
-
-However, once you understand the flow:
-
-```
-Network → Compute → Load Balancer → CloudFront
-```
-
-Everything becomes much easier to reason about.
-
----
-
-Happy hacking 🚀
+- [x] Modular Terraform structure
+- [x] Dev & prod environment separation
+- [x] GitHub Actions CI/CD pipeline
+- [ ] CloudWatch monitoring & alerting
+- [ ] WAF + stricter security group rules
+- [ ] Prod environment
